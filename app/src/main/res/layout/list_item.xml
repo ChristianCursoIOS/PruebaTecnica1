@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_auditoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="auditoria" />
+
+        <TextView
+            android:id="@+id/tv_fecha_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/tv_sucursal"
+            android:layout_toEndOf="@id/tv_auditoria"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:text="fecha inicio plan" />
+
+        <TextView
+            android:id="@+id/tv_sucursal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textSize="20sp"
+            tools:text="fecha inicio" />
+
+
+    </RelativeLayout>
+</layout>
