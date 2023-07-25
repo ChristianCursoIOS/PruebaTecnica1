@@ -1,3 +1,4 @@
+/*
 package com.appscloud.pruebatecnica.database;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -16,3 +17,4 @@ public class DBManager {
     private dbHelp _conexion;
     private SQLiteDatabase _basededatos;
 }
+*/

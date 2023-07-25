@@ -1,48 +1,60 @@
 package com.appscloud.pruebatecnica;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appscloud.pruebatecnica.api.APICliente;
 import com.appscloud.pruebatecnica.databinding.ListItemBinding;
-import com.appscloud.pruebatecnica.model.Datos;
+import com.appscloud.pruebatecnica.model.Dato;
 
-public class DatosAdapter extends ListAdapter<Datos, DatosAdapter.DatosViewHolder> {
+import java.util.List;
 
-    public static final DiffUtil.ItemCallback<Datos> DIFF_CALLBACK = new DiffUtil.ItemCallback<Datos>() {
+public class DatosAdapter extends RecyclerView.Adapter<DatosAdapter.DatosViewHolder> {
 
-        @Override
-        public boolean areItemsTheSame(@NonNull Datos oldItem, @NonNull Datos newItem) {
-            //User properties may have changed if reloaded from DB, but ID is fixed
+    /* public static final DiffUtil.ItemCallback<Datos> DIFF_CALLBACK = new DiffUtil.ItemCallback<Datos>() {
 
-            return oldItem.getId().equals(newItem.getId());
-        }
+         @Override
+         public boolean areItemsTheSame(@NonNull Datos oldItem, @NonNull Datos newItem) {
+             //User properties may have changed if reloaded from DB, but ID is fixed
 
-        @Override
-        public boolean areContentsTheSame(@NonNull Datos oldItem, @NonNull Datos newItem) {
-            //NOTE: if you use equals, your object must properly  override Object#equals()
-            //Incorrectly returning false here will  result into many animations
-            return oldItem.equals(newItem);
-        }
-    };
+             return oldItem.getId().equals(newItem.getId());
+         }
+
+         @Override
+         public boolean areContentsTheSame(@NonNull Datos oldItem, @NonNull Datos newItem) {
+             //NOTE: if you use equals, your object must properly  override Object#equals()
+             //Incorrectly returning false here will  result into many animations
+             return oldItem.equals(newItem);
+         }
+     };
 
 
-    protected DatosAdapter() {
-        super(DIFF_CALLBACK);
-    }
+     protected DatosAdapter() {
+         super(DIFF_CALLBACK);
+     }*/
     private static OnItemClickListener onItemClickListener;
+    private final List<Dato> datoList;
+    private Context context;
 
-    interface OnItemClickListener {
-        void onItemClick(Datos datos);
+
+    public DatosAdapter(List<Dato> datos) {
+        this.datoList = datos;
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(Dato dato);
+
+        void onLongItemClick(Dato dato);
 
     }
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
 
     }
@@ -51,6 +63,7 @@ public class DatosAdapter extends ListAdapter<Datos, DatosAdapter.DatosViewHolde
     @Override
     public DatosViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItemBinding binding = ListItemBinding.inflate(LayoutInflater.from(parent.getContext()));
+        this.context = parent.getContext();
 
         return new DatosViewHolder(binding);
 
@@ -58,33 +71,43 @@ public class DatosAdapter extends ListAdapter<Datos, DatosAdapter.DatosViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull DatosViewHolder holder, int position) {
-        Datos datos = getItem(position);
-        holder.bind(datos);
+        final Dato dato = datoList.get(position);
+        holder.bind(dato);
 
     }
 
+    @Override
+    public int getItemCount() {
+        return this.datoList.size();
+    }
 
-    static class DatosViewHolder extends RecyclerView.ViewHolder {
 
+    public static class DatosViewHolder extends RecyclerView.ViewHolder {
         private final ListItemBinding binding;
-
 
         public DatosViewHolder(@NonNull ListItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
-
         }
 
-        public void bind(Datos datos) {
+        void bind(Dato datos) {
             binding.tvAuditoria.setText(datos.getAuditoria());
-            binding.tvFechaPlan.setText(datos.getFecha());
+            binding.tvFechaPlan.setText(datos.getFechaInicioPlan());
             binding.tvSucursal.setText(datos.getSucursal());
 
+            // Forma con lambda para asignar el evento escuchador (listener)
             binding.getRoot().setOnClickListener(v -> {
                 onItemClickListener.onItemClick(datos);
             });
 
+            // Forma clasica para asignar el evento escuchador (listener)
+            binding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onLongItemClick(datos);
+                    return true;
+                }
+            });
             binding.executePendingBindings(); // cuando demos scroll sirve pars que esto pinte de
             // manera inmediata
 

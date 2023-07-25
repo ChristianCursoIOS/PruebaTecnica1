@@ -1,25 +1,22 @@
 package com.appscloud.pruebatecnica.api;
 
-import com.appscloud.pruebatecnica.DatosAdapter;
-import com.appscloud.pruebatecnica.model.Datos;
-
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 
 public class APICliente {
 
+    private static final String API_KEY = "adaDataService.svc/ObtenerMisAuditoriasPorFecha?llavemaestra=1058028";
+
     public interface DatoService {
-        @GET("1058028")
-        Call<String> getDatos();
+        @GET(API_KEY)// ENDPOINT
+        Call<String> getDatosAPI();
     }
 
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://dev.auditoriadev.com/ServicioADAProd/adaDataService.svc/ObtenerMisAuditoriasPorFecha/")
+    private final Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://dev.auditoriadev.com/ServicioADAProd/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build();
 
@@ -38,12 +35,9 @@ public class APICliente {
 
     public DatoService getService() {
         if (service == null) {
-            service = retrofit.create(DatoService.class);
-
+            service = retrofit.create(DatoService.class); // iniciar
         }
 
-
         return service;
-
     }
 }
