@@ -51,7 +51,7 @@ public class DatosAdapter extends RecyclerView.Adapter<DatosAdapter.DatosViewHol
         void onItemClick(Dato dato);
 
         void onLongItemClick(Dato dato);
-
+;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
